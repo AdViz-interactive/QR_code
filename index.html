@@ -45,43 +45,23 @@
             background-color: #cbd5e1;
             border-radius: 20px;
         }
-        
-        /* Responsive QR Code Container */
-        #qr-code-container {
-            max-width: 350px;
-            width: 100%;
-        }
-        
+
+        /* QR preview sizing */
         #qr-code-container canvas {
-            max-width: 100%;
+            max-width: 260px;
+            width: 100%;
             height: auto !important;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                        0 4px 6px -2px rgba(0, 0, 0, 0.05);
             border-radius: 1rem;
         }
 
-        /* Responsive adjustments for different screen sizes */
-        @media (max-width: 768px) {
-            #qr-code-container {
-                max-width: 280px;
-            }
+        @media (min-width: 768px) {
+            #qr-code-container canvas { max-width: 320px; }
         }
 
-        @media (min-width: 769px) and (max-width: 1024px) {
-            #qr-code-container {
-                max-width: 320px;
-            }
-        }
-
-        @media (min-width: 1025px) {
-            #qr-code-container {
-                max-width: 400px;
-            }
-        }
-
-        @media (min-width: 1440px) {
-            #qr-code-container {
-                max-width: 450px;
-            }
+        @media (min-width: 1024px) {
+            #qr-code-container canvas { max-width: 380px; }
         }
 
         .preset-btn {
@@ -91,41 +71,30 @@
             transform: translateY(-2px);
         }
 
-        /* Ensure panels don't overlap on small screens */
-        @media (max-width: 768px) {
+        /* Mobile layout behavior */
+        @media (max-width: 767px) {
             .main-content {
                 flex-direction: column;
-                height: auto;
             }
-            
-            .control-panel {
-                max-height: 50vh;
-                overflow-y: auto;
-            }
-            
-            .preview-panel {
-                min-height: 50vh;
-                padding: 2rem 1rem;
-            }
-        }
 
-        /* Better mobile layout */
-        @media (max-width: 640px) {
+            .control-panel {
+                max-height: 55vh;
+                overflow-y: auto;
+                border-right: none;
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            .preview-panel {
+                min-height: 45vh;
+            }
+
             body {
                 font-size: 14px;
-            }
-
-            .control-panel {
-                max-height: 45vh;
-            }
-
-            .preview-panel {
-                min-height: 55vh;
             }
         }
     </style>
 </head>
-<body class="h-screen flex flex-col overflow-hidden text-slate-800">
+<body class="min-h-screen flex flex-col bg-slate-100 text-slate-800">
 
     <!-- Navbar -->
     <nav class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between shrink-0 z-10">
@@ -141,10 +110,10 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="flex-1 flex flex-col md:flex-row overflow-hidden main-content">
+    <div class="flex-1 flex flex-col md:flex-row main-content">
         
         <!-- Left Panel: Controls -->
-        <div class="w-full md:w-1/2 lg:w-1/3 bg-white border-r border-slate-200 flex flex-col h-full overflow-hidden control-panel">
+        <div class="w-full md:w-1/2 lg:w-1/3 bg-white border-r border-slate-200 flex flex-col control-panel">
             <div class="p-4 sm:p-6 border-b border-slate-100 bg-slate-50">
                 <label class="block text-sm font-semibold text-slate-700 mb-2">Content</label>
                 <div class="relative">
@@ -296,7 +265,7 @@
         </div>
 
         <!-- Right Panel: Preview -->
-        <div class="flex-1 bg-slate-100 flex flex-col items-center justify-center p-4 sm:p-6 relative overflow-y-auto preview-panel">
+        <div class="flex-1 bg-slate-100 flex flex-col items-center justify-start md:justify-center p-4 sm:p-6 relative gap-4 md:gap-6 overflow-y-auto preview-panel">
             
             <div class="absolute top-4 sm:top-6 right-4 sm:right-6 hidden xl:block">
                <div class="bg-white/80 backdrop-blur text-xs text-slate-500 px-3 py-1 rounded-full border border-slate-200">
@@ -305,7 +274,7 @@
             </div>
 
             <!-- The QR Canvas -->
-            <div id="qr-code-container" class="mb-6 sm:mb-8 transition-all duration-300">
+            <div id="qr-code-container" class="w-full flex items-center justify-center mb-6 sm:mb-8">
                 <!-- Canvas injected here -->
             </div>
 
@@ -421,50 +390,36 @@
         // Apply Preset Function
         window.applyPreset = (type) => {
             if (type === 'fluid') {
-                // Matches the user's "Red Liquid" image
                 document.getElementById('dotsType').value = 'extra-rounded';
-                document.getElementById('dotsColor').value = '#8B0000'; // Deep Red
-                
+                document.getElementById('dotsColor').value = '#8B0000';
                 document.getElementById('cornersSquareType').value = 'extra-rounded';
-                document.getElementById('cornersSquareColor').value = '#500000'; // Darker Red for contrast
-                
+                document.getElementById('cornersSquareColor').value = '#500000';
                 document.getElementById('cornersDotType').value = 'dot';
                 document.getElementById('cornersDotColor').value = '#500000';
-                
                 document.getElementById('bgColor').value = '#ffffff';
             } else if (type === 'elegant') {
-                // New: Matches the "Blue Classy" image
                 document.getElementById('dotsType').value = 'classy-rounded';
-                document.getElementById('dotsColor').value = '#0e3a75'; // Navy Blue
-                
-                document.getElementById('cornersSquareType').value = 'extra-rounded'; // Closest to the leaf shape
+                document.getElementById('dotsColor').value = '#0e3a75';
+                document.getElementById('cornersSquareType').value = 'extra-rounded';
                 document.getElementById('cornersSquareColor').value = '#0e3a75';
-                
                 document.getElementById('cornersDotType').value = 'dot';
                 document.getElementById('cornersDotColor').value = '#0e3a75';
-                
                 document.getElementById('bgColor').value = '#ffffff';
             } else if (type === 'modern') {
                 document.getElementById('dotsType').value = 'square';
                 document.getElementById('dotsColor').value = '#4f46e5';
-                
                 document.getElementById('cornersSquareType').value = 'extra-rounded';
                 document.getElementById('cornersSquareColor').value = '#312e81';
-                
                 document.getElementById('cornersDotType').value = 'square';
                 document.getElementById('cornersDotColor').value = '#312e81';
-                
                 document.getElementById('bgColor').value = '#ffffff';
             } else if (type === 'dots') {
                 document.getElementById('dotsType').value = 'dots';
                 document.getElementById('dotsColor').value = '#059669';
-                
                 document.getElementById('cornersSquareType').value = 'dot';
                 document.getElementById('cornersSquareColor').value = '#064e3b';
-                
                 document.getElementById('cornersDotType').value = 'dot';
                 document.getElementById('cornersDotColor').value = '#064e3b';
-                
                 document.getElementById('bgColor').value = '#ffffff';
             }
             updateQR();
@@ -482,7 +437,7 @@
             const el = document.getElementById(id);
             if(el) {
                 el.addEventListener('input', updateQR);
-                el.addEventListener('change', updateQR); // For selects
+                el.addEventListener('change', updateQR);
             }
         });
 
@@ -492,30 +447,24 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = (event) => {
-                    // Create an image to get dimensions
                     const img = new Image();
                     img.onload = () => {
-                        // Create a canvas to crop the image into a circle
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
 
-                        // Use the smallest dimension for a perfect circle
                         const size = Math.min(img.width, img.height);
                         canvas.width = size;
                         canvas.height = size;
 
-                        // Create circular clipping path
                         ctx.beginPath();
                         ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
                         ctx.closePath();
                         ctx.clip();
 
-                        // Draw the image centered
                         const x = (size - img.width) / 2;
                         const y = (size - img.height) / 2;
                         ctx.drawImage(img, x, y);
 
-                        // Set the new circular image as the logo
                         logoFile = canvas.toDataURL();
 
                         document.getElementById('logoFileName').textContent = file.name;
@@ -530,7 +479,7 @@
 
         document.getElementById('removeLogo').addEventListener('click', function() {
             logoFile = null;
-            document.getElementById('logoInput').value = ""; // reset file input
+            document.getElementById('logoInput').value = "";
             document.getElementById('logoPreviewWrapper').classList.add('hidden');
             updateQR();
         });
@@ -538,9 +487,6 @@
         // Download
         document.getElementById('downloadBtn').addEventListener('click', () => {
             const ext = document.getElementById('fileExt').value;
-            // Force a high resolution download if it's raster
-            // The library uses the current options.
-            // We set width/height to 1000 in getOptions, so it should be high res by default.
             qrCode.download({ name: "my-designer-qr", extension: ext });
         });
 
