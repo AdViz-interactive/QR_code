@@ -58,11 +58,22 @@
       border-radius: 1rem;
     }
 
-    /* IMPORTANT: the QR library often injects an SVG or IMG (not just canvas).
-       Add matching rules for svg and img so the preview displays small and consistent. */
+    /* Constrain the preview container itself so large injected SVG/IMG don't overflow.
+       Keep responsive breakpoints so the preview grows slightly on wider screens. */
+    #qr-code-container {
+      width: 100%;
+      max-width: 260px; /* mobile/small screens preview width */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Ensure svg/img/canvas injected by the library scale down to container */
     #qr-code-container svg,
-    #qr-code-container img {
-      max-width: 260px;
+    #qr-code-container img,
+    #qr-code-container canvas {
+      max-width: 100%;
       width: 100%;
       height: auto !important;
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
@@ -77,12 +88,18 @@
       #qr-code-container img {
         max-width: 320px;
       }
+      #qr-code-container {
+        max-width: 320px;
+      }
     }
 
     @media (min-width: 1024px) {
       #qr-code-container canvas,
       #qr-code-container svg,
       #qr-code-container img {
+        max-width: 380px;
+      }
+      #qr-code-container {
         max-width: 380px;
       }
     }
